@@ -72,17 +72,18 @@ int main()
 /*依然有超时的情况, 用埃式筛法才不会超时*/
 #include <vector>
 #include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 // 判断位数(除了11之外,所有回文素数的位数都不是偶数)
-bool judge_weishu(int k)
-{
-    if (k >= 10 && k < 100 && k != 11 || k >= 1000 && k < 10000)
-        return false;
-    if (k >= 100000 && k < 1000000 || k >= 10000000 && k < 100000000)
-        return false;
-    return true;
-}
-
+// bool judge_weishu(int k)
+// {
+//     if (k >= 10 && k < 100 && k != 11 || k >= 1000 && k < 10000)
+//         return false;
+//     if (k >= 100000 && k < 1000000 || k >= 10000000 && k < 100000000)
+//         return false;
+//     return true;
+// }
+bool book[100000001];
 // 判断回文
 bool judge_huiwen(int k)
 {
@@ -100,29 +101,38 @@ bool judge_huiwen(int k)
     return true;
 }
 // 判断素数(用埃式筛法)
-bool judge_sushu(int num)
+void prime(int b)
 {
-    int temp = num, ans = 0;
-    while (temp != 0)
+    memset(book, true, sizeof(book));
+    book[1] = false; // 1不是质数
+    int n = sqrt(b);
+    for (int i = 2; i <= n; i++)
     {
-        ans = ans * 10 + temp % 10;
-        temp /= 10;
+        if (book[i])
+        {
+            // 质数的倍数绝对不是质数，把所有质数的倍数全部设为false
+            for (int j = 2; j <= b / i; j++)
+                book[i * j] = false; // i*j<=b
+        }
     }
-    if (ans == num)
-        return true;
-    else
-        return false;
 }
 int main()
 {
     int a, b;
     cin >> a >> b;
+    if (b >= 10000000)
+        b = 9999999;
+
+    prime(b);
+
+    if (a > b)
+        return 0;
 
     vector<int> res;
 
     for (int i = a; i <= b; i++)
     {
-        if (judge_weishu(i) && judge_huiwen(i) && judge_sushu(i))
+        if (judge_huiwen(i) && book[i])
         {
             res.push_back(i);
         }
