@@ -69,7 +69,7 @@ int main()
 }
 */
 
-/*依然有超时的情况*/
+/*依然有超时的情况, 用埃式筛法才不会超时*/
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -99,22 +99,19 @@ bool judge_huiwen(int k)
             return false;
     return true;
 }
-// 判断素数
+// 判断素数(用埃式筛法)
 bool judge_sushu(int num)
 {
-    if (num == 2)
+    int temp = num, ans = 0;
+    while (temp != 0)
     {
+        ans = ans * 10 + temp % 10;
+        temp /= 10;
+    }
+    if (ans == num)
         return true;
-    }
-
-    for (int i = 2; i < num; i++)
-    {
-        if (num % i == 0)
-        {
-            return false;
-        }
-    }
-    return true;
+    else
+        return false;
 }
 int main()
 {
